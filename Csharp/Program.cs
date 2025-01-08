@@ -4,11 +4,11 @@ namespace Csharp
 {
     internal class Program
     {
-        static void Main(string[] args)
-        {
-            _04Section.S04_01_debug test = new _04Section.S04_01_debug();  
-            test.Run();
+        //static void Main(string[] args)
+        //{
+        //    _04Section.S04_02_textRPG test = new _04Section.S04_02_textRPG();  
+        //    test.Main();
 
-        }
+        //}
     }
 }
