@@ -19,6 +19,9 @@ namespace Csharp.Section06
     {
         private GameMode mode = GameMode.Lobby;
         private Player player = null;
+        private Random rand = new Random();
+        private Monster monster = null;
+
 
         public void Process()
         {
@@ -31,6 +34,7 @@ namespace Csharp.Section06
                     ProcessTown();
                     break;
                 case GameMode.Field:
+                    ProcessField();
                     break;
 
             }
@@ -84,5 +88,91 @@ namespace Csharp.Section06
             }
 
         }
+
+        private void ProcessField()
+        {
+            Console.WriteLine("필드에 입장했습니다");
+            Console.WriteLine("[1] 싸우기");
+            Console.WriteLine("[2] 일정확률로 마을 돌아가기");
+
+            CreateRandomMonster();
+
+            string input = Console.ReadLine();
+
+            switch(input)
+            {
+                case "1":
+                    ProcessFight();
+                    break;
+                case "2":
+                    TryEscape();
+                    break;
+            }
+
+        }
+
+        private void TryEscape()
+        {
+            int randValue = rand.Next(0, 101);
+
+            if(randValue < 33)
+            {
+                mode = GameMode.Town;
+            }
+            else
+            {
+                ProcessField();
+            }
+        }
+
+
+        private void ProcessFight()
+        {
+            while (true)
+            {
+                int damage = player.GetAttack();
+                monster.OnDamaged(damage);
+                if (monster.isDead())
+                {
+                    Console.WriteLine("승리");
+                    Console.WriteLine($"남은 체력{player.GetHp()}");
+                    break;
+                }
+
+                damage = monster.GetAttack();
+                player.OnDamaged(damage);
+                if (player.isDead())
+                {
+                    Console.WriteLine("패배");
+                    mode = GameMode.Lobby;
+                    break;
+                }
+            }
+        }
+
+
+        private void CreateRandomMonster()
+        {
+            int randValue = rand.Next(0, 3);
+            switch (randValue)
+            {
+                case 0:
+                    monster = new Slime();
+                    Console.WriteLine("슬라임 생성");
+                    break;
+                case 1:
+                    monster = new Orc();
+                    Console.WriteLine("오크 생성");
+                    break;
+                case 2:
+                    monster = new Skeleton();
+
+                    Console.WriteLine("스켈레톤 생성");
+                    break;
+
+            }
+        }
+
+
     }
 }
